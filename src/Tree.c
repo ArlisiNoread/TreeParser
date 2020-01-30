@@ -17,10 +17,11 @@
 
 typedef struct Tree Tree;
 typedef struct Node Node;
+Tree* constructorTree();
 Node* constructorNode(char String[]);
 bool isNodeLeaf(Node* node);
 bool isNodeRoot(Node* node);
-char* toStringTree(Tree tree);
+char* toStringTree(Tree* tree);
 char* toStringNode(Node* node);
 void testTreeCode();
 
@@ -38,17 +39,18 @@ typedef struct Node{
 
 Tree* constructorTree(){
 	Tree* tree = (Tree*)malloc(sizeof(Tree));
+	tree->root = NULL;
 
 	return tree;
 }
 
 Node* constructorNode(char String[]){
-	Node* ptr = (Node*)malloc(sizeof(sizeof(Node)));
+	Node* ptr = (Node*)malloc(sizeof(Node));
 	ptr->parent = NULL;
 	ptr->left = NULL;
 	ptr->mid = NULL;
 	ptr->right = NULL;
-	strcpy(ptr->value, String);
+	ptr->value = NULL;
 
 	return ptr;
 }
@@ -81,45 +83,72 @@ void addChildToNode(Node* node, Node* childNode, char string[]){
 	childNode->parent = node;
 }
 
-char* toStringTree(Tree tree){
-	char* ret = "Raiz{";
-	char* temp = toStringNode(tree.root);
-	ret = strncat(ret, temp, strlen(ret) + strlen(temp));
-	ret = strncat(ret, "}", strlen(ret) + 1);
-	return ret;
+char* toStringTree(Tree* tree){
+	char ret[10000] = "{\"Raiz\":";
+	char* temp = toStringNode(tree->root);
+	strncat(ret, temp, (unsigned) strlen(temp));
+	strncat(ret, "}\n", 3);
+	return strdup(ret);
 }
 
 char* toStringNode(Node* node){
-	char* ret = "";
+	char ret[10000] = "{";
 
 	if(node == NULL){
-		strncat(ret, "NULL", 5);
-		return ret;
+		//strncat(ret, "\"NULL\"", 7);
+		return strdup("\"NULL\"");
 	}
+	strncat(ret, "\"",2);
+	strncat(ret, node->value,(unsigned) strlen(node->value));
+	strncat(ret, "\"",2);
+	strncat(ret, ":{", 3);
 
-	ret = concatString(ret, node->value);
-	ret = concatString(ret, ":{");
+	char left[10000] = "\"hijo-izq\":";
+	char* lptl = toStringNode(node->left);
+	strncat(left, lptl, strlen(lptl));
+	strncat(left,",", 2);
 
-	char* left = toStringNode(node->left);
-	left = concatString("{", left);
-	left = concatString(left,"},");
+	char mid[10000] = "\"hijo-mid\":";
+	char* lptm = toStringNode(node->mid);
+	strncat(mid, lptm, strlen(lptm));
+	strncat(mid,",", 2);
 
-	char* mid = toStringNode(node->mid);
-	left = concatString("{", mid);
-	left = concatString(mid,"},");
+	char right[10000] = "\"hijo-der\":";
+	char* lptr = toStringNode(node->right);
+	strncat(right, lptr, strlen(lptr));
+	//strncat(right,"}", 2);
 
-	char* right = toStringNode(node->right);
-	left = concatString("{", right);
-	left = concatString(right,"}");
+	strncat(ret, left, (unsigned) strlen(left));
+	strncat(ret, mid, (unsigned) strlen(mid));
+	strncat(ret, right, (unsigned) strlen(right));
+	strncat(ret, "}", 3);
 
-	ret = concatString(ret, left);
-	ret = concatString(ret, mid);
-	ret = concatString(ret, right);
+	strncat(ret, "}", 2);
+	return strdup(ret);
+}
 
-	return ret;
+void addValueNode(Node* node, char cadena[]){
+	if(node->value != NULL){
+		free(node->value);
+	}
+	node->value = (char*) malloc(((unsigned)strlen(cadena)*sizeof(char)) +1);
+	printf("Revisando: %s\n", node->value);
+	node->value[0] = '\0';
+	strncat(node->value, cadena, (unsigned) strlen(cadena));
+
+	return;
 }
 
 void testTreeCode(char code[]){
+	Tree* tree = constructorTree();
 
+	tree->root = constructorNode("");
+	addValueNode(tree->root, "Valor1");
 
+	tree->root->left = constructorNode("");
+	addValueNode(tree->root->left, "Valor2");
+
+	printf("Valor: %s\n",tree->root->value);
+
+	printf("%s", toStringTree(tree));
 }

@@ -16,8 +16,10 @@
 #include "Tree.h"
 
 int main(void) {
-	printf("Inicio\n");
+	printf("Inicio de programa\n");
+
 	testTreeCode();
 
+	printf("Fin de programa\n");
 	return EXIT_SUCCESS;
 }

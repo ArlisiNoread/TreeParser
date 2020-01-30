@@ -6,6 +6,7 @@
 char* concatString(char* a, char* b);
 
 char* concatString(char* a, char* b){
-	return strncat(a, b, strlen(a) + strlen(b));
+	//return strncat(a, b, strlen(a) + strlen(b));
+	return "";
 }
 
