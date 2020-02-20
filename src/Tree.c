@@ -132,7 +132,6 @@ void addValueNode(Node* node, char cadena[]){
 		free(node->value);
 	}
 	node->value = (char*) malloc(((unsigned)strlen(cadena)*sizeof(char)) +1);
-	printf("Revisando: %s\n", node->value);
 	node->value[0] = '\0';
 	strncat(node->value, cadena, (unsigned) strlen(cadena));
 
@@ -148,7 +147,6 @@ void testTreeCode(char code[]){
 	tree->root->left = constructorNode("");
 	addValueNode(tree->root->left, "Valor2");
 
-	printf("Valor: %s\n",tree->root->value);
 
 	printf("%s", toStringTree(tree));
 }
